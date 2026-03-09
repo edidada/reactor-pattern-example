@@ -9,6 +9,7 @@
 #include <atomic> 
 #include <array>
 #include <map>
+#include <string>
 
 #include "reactor/event_handler.h"
 
