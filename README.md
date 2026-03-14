@@ -1,4 +1,89 @@
 # reactor-pattern-example
+.bazelrc
+# `.bazelrc` 到底是干嘛的？（超直白解释）
+一句话：
+**它是 Bazel 的“默认配置文件”，用来给所有 Bazel 命令自动加参数、设置环境变量。**
+
+你每次敲
+```bash
+bazel build
+bazel test
+bazel run
+```
+**Bazel 都会自动读取 .bazelrc，把里面的配置当成默认参数带上。**
+
+---
+
+## 1. 核心作用（你最需要知道的）
+1. **统一团队构建配置**
+   所有人用一样的编译参数，不会“我这能跑你那报错”
+
+2. **不用每次敲长命令**
+   比如你每次都要加：
+   ```bash
+   bazel build --jobs=8 --cxxopt=-std=c++17 //...
+   ```
+   写进 `.bazelrc` 后，直接：
+   ```bash
+   bazel build //...
+   ```
+   自动生效
+
+3. **设置代理、缓存、平台、编译器**
+   国内常用**加速配置**
+
+4. **控制 Bazel 自身行为**
+   内存、并发、输出路径、远程构建
+
+---
+
+## 2. 放在哪里？
+直接放在**项目根目录**，和 `WORKSPACE` / `MODULE.bazel` 同级
+```
+你的项目/
+├── .bazelrc        <-- 在这里
+├── WORKSPACE
+└── BUILD
+```
+
+---
+
+## 3. 真实常用配置（直接复制可用）
+```bash
+# 并发数（根据你的CPU核心）
+build --jobs=8
+
+# C++ 编译标准
+build --cxxopt=-std=c++17
+build --cxxopt=-O2
+
+# 开启颜色输出
+build --color=yes
+
+# 国内常用：关闭远程下载警告（不影响使用）
+build --remote_download_warning_threshold=
+
+# 内存限制
+build --local_ram_resources=HOST_RAM*.5
+
+# 测试并发
+test --jobs=10
+test --test_output=errors
+```
+
+---
+
+## 4. 它和 .bashrc / .zshrc 区别？
+- `.bashrc` / `.zshrc`：**系统终端**的配置
+- **`.bazelrc`：只给 Bazel 用**的配置
+
+---
+
+## 5. 最简单总结
+✅ **.bazelrc = Bazel 的默认启动参数配置**
+✅ 写一次，**所有 bazel 命令自动生效**
+✅ 团队统一构建环境必备
+
 
 An implementation of a reactor pattern with the accompanying IPC server/client example use case.
 
