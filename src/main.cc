@@ -4,6 +4,8 @@
 #include <iostream>
 #include <csignal>
 #include <atomic>
+#include <signal.h>
+#include <pthread.h>
 #include "reactor/reactor.h"
 #include "IPCServer.h"
 #include "IPCClient.h"
@@ -11,9 +13,9 @@
 static void setup_signal_handling() {
   sigset_t sigset;
 
-  ::sigemptyset(&sigset);
-  ::sigaddset(&sigset, SIGTERM);
-  ::sigaddset(&sigset, SIGINT);
+  sigemptyset(&sigset);
+  sigaddset(&sigset, SIGTERM);
+  sigaddset(&sigset, SIGINT);
 
   pthread_sigmask(SIG_BLOCK, &sigset, NULL);
 }
@@ -23,9 +25,9 @@ static void handle_signals() {
   int signal;
   bool done;
 
-  ::sigemptyset(&sigset);
-  ::sigaddset(&sigset, SIGTERM);
-  ::sigaddset(&sigset, SIGINT);
+  sigemptyset(&sigset);
+  sigaddset(&sigset, SIGTERM);
+  sigaddset(&sigset, SIGINT);
 
   done = false;
 
